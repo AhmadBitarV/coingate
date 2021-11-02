@@ -1,0 +1,56 @@
+:root {
+  --font-family: "Roboto", sans-serif;
+  --font-extraLight: 200;
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-bold: 700;
+
+  --color-black: #000;
+  --color-white: #fff;
+  --color-primary: #5022ed;
+  --color-secondary: #17e0b5;
+  --color-secondary-rgb: rgb(23, 224, 181);
+  --color-grey: #b5b5b5;
+  --color-link: #7f88a0;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.MuiSelect-root {
+  display: flex !important;
+  align-items: center;
+  gap: 1rem;
+}
+
+.MuiDivider-root {
+  margin-right: 1rem !important;
+}
+
+.MuiOutlinedInput-input {
+  text-align: center !important;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.app {
+  overflow: hidden;
+}
