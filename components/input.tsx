@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => {
 });
 
 interface InputProps {
-  inputValue: number | undefined;
+  inputValue: string;
   selectValue: string;
   options: string[];
   type?: "cash" | "crypto";

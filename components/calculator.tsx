@@ -103,8 +103,8 @@ const App: React.FC = () => {
   const router = useRouter();
 
   const [loaded, setLoaded] = useState<boolean>(false);
-  const [amount1, setAmount1] = useState<number | undefined>();
-  const [amount2, setAmount2] = useState<number | undefined>();
+  const [amount1, setAmount1] = useState<string>("");
+  const [amount2, setAmount2] = useState<string>("");
   const [currency1, setCurrency1] = useState<string>("EUR");
   const [currency2, setCurrency2] = useState<string>("USD");
   const [currencies, setCurrencies] = useState<string[]>([]);
@@ -120,37 +120,32 @@ const App: React.FC = () => {
     });
   }, []);
 
-  const onAmountOneChangeHandler = (amount1: number) => {
+  const onAmountOneChangeHandler = (amount1: string) => {
     const result =
-      amount1 * rates[currency1.toUpperCase()][currency2.toUpperCase()];
-    setAmount2(+result.toFixed(2));
+      +amount1 * rates[currency1.toUpperCase()][currency2.toUpperCase()];
+    setAmount2(result.toFixed(2));
     setAmount1(amount1);
   };
 
-  const onAmountTwoChangeHandler = (amount2: number) => {
+  const onAmountTwoChangeHandler = (amount2: string) => {
     const result =
-      amount2 * rates[currency2.toUpperCase()][currency1.toUpperCase()];
-    setAmount1(+result.toFixed(2));
+      +amount2 * rates[currency2.toUpperCase()][currency1.toUpperCase()];
+    setAmount1(result.toFixed(2));
     setAmount2(amount2);
   };
 
   const onSelectOneHandler = (currency1: string) => {
-    let result = 0;
-    if (amount1) {
-      result =
-        amount1 * rates[currency1.toUpperCase()][currency2.toUpperCase()];
-    }
+    let result =
+      +amount1 * rates[currency1.toUpperCase()][currency2.toUpperCase()];
 
-    setAmount2(+result.toFixed(2));
+    setAmount2(result.toFixed(2));
     setCurrency1(currency1);
   };
 
   const onSelectTwoHandler = (currency2: string) => {
-    let result = 0;
-    if (amount2) {
-      amount2 * rates[currency2.toUpperCase()][currency1.toUpperCase()];
-    }
-    setAmount1(+result.toFixed(2));
+    let result =
+      +amount2 * rates[currency2.toUpperCase()][currency1.toUpperCase()];
+    setAmount1(result.toFixed(2));
     setCurrency2(currency2);
   };
 
