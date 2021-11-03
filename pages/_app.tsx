@@ -1,7 +1,7 @@
 import "styles/globals.scss";
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
 
-import { theme } from "theme";
+import { theme } from "styles/theme";
 import Layout from "components/layout";
 import { useEffect } from "react";
 import App from "next/app";

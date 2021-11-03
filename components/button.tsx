@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => {
       padding: "0.8em 2em",
       boxShadow: "none",
       fontSize: theme.typography.body1.fontSize,
-      margin: "0 1em",
 
       "&:hover": {
         backgroundColor: `${theme.palette.secondary.main}`,

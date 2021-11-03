@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => {
     card: {
       minHeight: "28.125rem",
       width: "100%",
-      padding: "2rem 1rem",
+      padding: "2rem 0",
       position: "relative",
       display: "flex",
       justifyContent: "center",
@@ -155,7 +155,10 @@ const App: React.FC<Props> = (props) => {
         }}
       >
         <CardContent
-          sx={{ paddingTop: "1rem" }}
+          sx={{
+            padding: "0 1.5rem",
+            paddingTop: "1rem",
+          }}
           className={classes.cardContent}
         >
           <InputUI
@@ -202,6 +205,7 @@ const App: React.FC<Props> = (props) => {
 
         <CardActions
           sx={{
+            padding: "0 1.5rem",
             paddingTop: "2rem",
           }}
         >

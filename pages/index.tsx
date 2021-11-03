@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { theme } from "theme";
+import { theme } from "styles/theme";
 import Calculator from "components/calculator";
 
 import { makeStyles } from "@material-ui/core";
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => {
         padding: "5rem 1.25rem",
         background: theme.palette.primary.main,
         gridTemplateColumns: "1fr",
-        justifyItems: "flex-start",
+        justifyItems: "center",
         gap: "0rem",
         clipPath: "polygon(0 0, 100% 0%, 100% 95%, 0% 100%)",
       },
