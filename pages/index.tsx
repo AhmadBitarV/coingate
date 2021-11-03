@@ -11,6 +11,9 @@ import { Button } from "@material-ui/core";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Slide from "@mui/material/Slide";
 
+import { GetStaticProps } from "next";
+import axios from "axios";
+
 const useStyles = makeStyles((theme) => {
   return {
     root: {
@@ -50,16 +53,18 @@ const useStyles = makeStyles((theme) => {
       },
 
       [theme.breakpoints.down("sm")]: {
-        padding: "5rem 1rem",
+        padding: "5rem 1.25rem",
         background: theme.palette.primary.main,
         gridTemplateColumns: "1fr",
-        justifyItems: "center",
-        gap: "4rem",
+        justifyItems: "flex-start",
+        gap: "0rem",
+        clipPath: "polygon(0 0, 100% 0%, 100% 95%, 0% 100%)",
       },
     },
 
     calculator: {
       width: "100%",
+      maxWidth: "400px",
       height: "100%",
       gridRow: "1 / 3",
       gridColumn: "2 / 3",
@@ -83,6 +88,7 @@ const useStyles = makeStyles((theme) => {
       lineHeight: theme.typography.h1.lineHeight,
       [theme.breakpoints.down("sm")]: {
         fontSize: "2rem",
+        marginBottom: "2rem",
       },
     },
 
@@ -90,6 +96,10 @@ const useStyles = makeStyles((theme) => {
       color: theme.typography.body2.color,
       fontSize: theme.typography.body2.fontSize,
       lineHeight: theme.typography.body2.lineHeight,
+
+      [theme.breakpoints.down("sm")]: {
+        maxWidth: 315,
+      },
     },
 
     button: {
@@ -105,7 +115,12 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const Home: NextPage = () => {
+interface Props {
+  currencies: string[];
+  rates: string[];
+}
+
+const Home: NextPage<Props> = ({ rates, currencies }) => {
   const classes = useStyles();
   const router = useRouter();
 
@@ -116,7 +131,7 @@ const Home: NextPage = () => {
       </Head>
 
       <Box className={classes.root}>
-        <Slide timeout={1100} direction="up" in={true}>
+        <Slide timeout={1250} direction="left" in={true}>
           <Box sx={{ alignSelf: "flex-end" }}>
             <h1 className={classes.h1}>
               <span style={{ color: theme.palette.secondary.main }}>
@@ -129,11 +144,14 @@ const Home: NextPage = () => {
             </h1>
           </Box>
         </Slide>
-        <Box sx={{ maxWidth: "400px" }} className={classes.calculator}>
-          <Calculator />
-        </Box>
 
         <Slide timeout={1250} direction="up" in={true}>
+          <Box className={classes.calculator}>
+            <Calculator rates={rates} currencies={currencies} />
+          </Box>
+        </Slide>
+
+        <Slide timeout={1250} direction="right" in={true}>
           <Box className={classes.paragraph}>
             <p className={classes.p}>
               Why bother going through complicated exchanges? Buy cryptocurrency
@@ -162,3 +180,14 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const response = await axios.get("https://api.coingate.com/v2/rates");
+
+  return {
+    props: {
+      rates: response.data.merchant,
+      currencies: Object.keys(response.data.merchant),
+    },
+  };
+};

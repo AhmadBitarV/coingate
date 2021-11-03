@@ -1,10 +1,11 @@
 import "styles/globals.scss";
-import type { AppProps } from "next/app";
 import { CssBaseline, ThemeProvider } from "@material-ui/core";
 
 import { theme } from "theme";
 import Layout from "components/layout";
 import { useEffect } from "react";
+import App from "next/app";
+import type { AppProps, AppContext } from "next/app";
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -27,5 +28,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     </>
   );
 }
+
+MyApp.getInitialProps = async (appContext: AppContext) => {
+  const appProps = await App.getInitialProps(appContext);
+
+  return { ...appProps };
+};
 
 export default MyApp;

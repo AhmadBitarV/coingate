@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
+
 import { makeStyles } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
 
@@ -14,8 +14,6 @@ import InputUI from "components/input";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -27,6 +25,8 @@ const useStyles = makeStyles((theme) => {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+      borderRadius: "25px",
+      overflow: "visible",
 
       "&:after": {
         content: "''",
@@ -98,27 +98,22 @@ const payments = [
   },
 ];
 
-const App: React.FC = () => {
+interface Props {
+  currencies: string[];
+  rates: any;
+}
+
+const App: React.FC<Props> = (props) => {
   const classes = useStyles();
   const router = useRouter();
 
-  const [loaded, setLoaded] = useState<boolean>(false);
   const [amount1, setAmount1] = useState<string>("");
   const [amount2, setAmount2] = useState<string>("");
   const [currency1, setCurrency1] = useState<string>("EUR");
   const [currency2, setCurrency2] = useState<string>("USD");
-  const [currencies, setCurrencies] = useState<string[]>([]);
-  const [rates, setRates] = useState<string[]>([]);
 
-  useEffect(() => {
-    axios.get("https://api.coingate.com/v2/rates").then((res: any) => {
-      setRates(res.data.merchant);
-      setCurrencies(Object.keys(res.data.merchant));
-      setLoaded(true);
-
-      console.log(res.data);
-    });
-  }, []);
+  const [currencies, setCurrencies] = useState<string[]>(props.currencies);
+  const [rates, setRates] = useState<string[]>(props.rates);
 
   const onAmountOneChangeHandler = (amount1: string) => {
     const result =
@@ -150,84 +145,75 @@ const App: React.FC = () => {
   };
 
   return (
-    <Card
-      sx={{ borderRadius: "25px", overflow: "visible" }}
-      className={classes.card}
-    >
-      {loaded ? (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "stretch",
-            width: "100%",
+    <Card className={classes.card}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "stretch",
+          width: "100%",
+        }}
+      >
+        <CardContent
+          sx={{ paddingTop: "1rem" }}
+          className={classes.cardContent}
+        >
+          <InputUI
+            label={"Pay"}
+            options={currencies}
+            inputValue={amount1}
+            selectValue={currency1}
+            onInputChange={onAmountOneChangeHandler}
+            onCurrencyChange={onSelectOneHandler}
+            autoFocus
+          />
+
+          <InputUI
+            label={"Buy"}
+            options={currencies}
+            inputValue={amount2}
+            selectValue={currency2}
+            onInputChange={onAmountTwoChangeHandler}
+            onCurrencyChange={onSelectTwoHandler}
+          />
+
+          <Typography>Payment method</Typography>
+          <FormControl className={classes.select}>
+            <Select
+              disableUnderline
+              defaultValue={payments[0].value}
+              IconComponent={KeyboardArrowDownIcon}
+            >
+              {payments.map((payment) => {
+                return (
+                  <MenuItem
+                    className={classes.option}
+                    value={payment.value}
+                    key={payment.id}
+                  >
+                    {payment.icon}
+                    {payment.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </CardContent>
+
+        <CardActions
+          sx={{
+            paddingTop: "2rem",
           }}
         >
-          <CardContent
-            sx={{ paddingTop: "1rem" }}
-            className={classes.cardContent}
+          <Button
+            onClick={() => router.push("/authenticate")}
+            className={classes.button}
+            disabled={!amount1 || !amount2 ? true : false}
           >
-            <InputUI
-              label={"Pay"}
-              options={currencies}
-              inputValue={amount1}
-              selectValue={currency1}
-              onInputChange={onAmountOneChangeHandler}
-              onCurrencyChange={onSelectOneHandler}
-              autoFocus
-            />
-
-            <InputUI
-              label={"Buy"}
-              options={currencies}
-              inputValue={amount2}
-              selectValue={currency2}
-              onInputChange={onAmountTwoChangeHandler}
-              onCurrencyChange={onSelectTwoHandler}
-            />
-
-            <Typography>Payment method</Typography>
-            <FormControl className={classes.select}>
-              <Select
-                disableUnderline
-                defaultValue={payments[0].value}
-                IconComponent={KeyboardArrowDownIcon}
-              >
-                {payments.map((payment) => {
-                  return (
-                    <MenuItem
-                      className={classes.option}
-                      value={payment.value}
-                      key={payment.id}
-                    >
-                      {payment.icon}
-                      {payment.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </CardContent>
-
-          <CardActions
-            sx={{
-              paddingTop: "2rem",
-            }}
-          >
-            <Button
-              onClick={() => router.push("/authenticate")}
-              className={classes.button}
-              disabled={!amount1 || !amount2 ? true : false}
-            >
-              Buy {currency2}
-            </Button>
-          </CardActions>
-        </div>
-      ) : (
-        <Box>
-          <CircularProgress />
-        </Box>
-      )}
+            Buy {currency2}
+          </Button>
+        </CardActions>
+      </div>
     </Card>
   );
 };
