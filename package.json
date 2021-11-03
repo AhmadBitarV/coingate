@@ -1,5 +1,5 @@
 {
-  "name": "coingate-nextjs",
+  "name": "coingate",
   "private": true,
   "scripts": {
     "dev": "next dev",
