@@ -1,6 +1,7 @@
-import type { NextPage } from "next";
+import type { NextPage, GetStaticProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 import { theme } from "styles/theme";
 import Calculator from "components/calculator";
@@ -10,9 +11,6 @@ import Box from "@mui/material/Box";
 import { Button } from "@material-ui/core";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Slide from "@mui/material/Slide";
-
-import { GetStaticProps } from "next";
-import axios from "axios";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -117,7 +115,9 @@ const useStyles = makeStyles((theme) => {
 
 interface Props {
   currencies: string[];
-  rates: string[];
+  rates: {
+    merchant: object[];
+  };
 }
 
 const Home: NextPage<Props> = ({ rates, currencies }) => {
@@ -186,8 +186,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: {
-      rates: response.data.merchant,
+      rates: response.data,
       currencies: Object.keys(response.data.merchant),
     },
+
+    revalidate: 600,
   };
 };

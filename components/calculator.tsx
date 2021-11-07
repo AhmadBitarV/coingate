@@ -11,9 +11,8 @@ import { Select, MenuItem, FormControl } from "@material-ui/core";
 import CardContent from "@mui/material/CardContent";
 import { CardActions } from "@mui/material";
 import InputUI from "components/input";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import CreditCardIcon from "@mui/icons-material/CreditCard";
-import LocalAtmIcon from "@mui/icons-material/LocalAtm";
+
+import { paymentMethod } from "../data";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -75,73 +74,83 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const payments = [
-  {
-    name: "Paypal",
-    icon: <AccountBalanceIcon />,
-    value: "paypal",
-    id: "1",
-  },
-
-  {
-    name: "Credit Card",
-    icon: <CreditCardIcon />,
-    value: "creditCard",
-    id: "2",
-  },
-
-  {
-    name: "Bank Transfer",
-    icon: <LocalAtmIcon />,
-    value: "bankTransfer",
-    id: "3",
-  },
-];
-
 interface Props {
   currencies: string[];
-  rates: any;
+  rates: {
+    merchant: object[];
+  };
 }
 
-const App: React.FC<Props> = (props) => {
+const App: React.FC<Props> = ({ currencies, rates }) => {
   const classes = useStyles();
   const router = useRouter();
 
-  const [amount1, setAmount1] = useState<string>("");
-  const [amount2, setAmount2] = useState<string>("");
-  const [currency1, setCurrency1] = useState<string>("EUR");
-  const [currency2, setCurrency2] = useState<string>("USD");
+  const [input1, setInput1] = useState<string>("");
+  const [input2, setInput2] = useState<string>("");
+  const [paycurrency, setPaycurrency] = useState<string>("EUR");
+  const [buycurrency, setButcurrency] = useState<string>("BTC");
 
-  const [currencies, setCurrencies] = useState<string[]>(props.currencies);
-  const [rates, setRates] = useState<string[]>(props.rates);
+  const onPayInputHandler = (input1: string) => {
+    let rate =
+      rates.merchant[paycurrency.toUpperCase()][buycurrency.toUpperCase()];
+    let input2 = +input1 * rate;
 
-  const onAmountOneChangeHandler = (amount1: string) => {
-    const result =
-      +amount1 * rates[currency1.toUpperCase()][currency2.toUpperCase()];
-    setAmount2(result.toFixed(2));
-    setAmount1(amount1);
+    // and here is a workaround in case the "rate" wasn't found in the first object "paycurrency"
+    if (!rate) {
+      rate =
+        rates.merchant[buycurrency.toUpperCase()][paycurrency.toUpperCase()];
+      input2 = +input1 / rate;
+    }
+
+    setInput2(input2.toFixed(8));
+    setInput1(input1);
   };
 
-  const onAmountTwoChangeHandler = (amount2: string) => {
-    const result =
-      +amount2 * rates[currency2.toUpperCase()][currency1.toUpperCase()];
-    setAmount1(result.toFixed(2));
-    setAmount2(amount2);
+  const onBuyInputHandler = (input2: string) => {
+    let rate =
+      rates.merchant[buycurrency.toUpperCase()][paycurrency.toUpperCase()];
+    let input1 = +input2 * rate;
+
+    // and here is a workaround in case the "rate" wasn't found in the first object "paycurrency"
+    if (!rate) {
+      rate =
+        rates.merchant[paycurrency.toUpperCase()][buycurrency.toUpperCase()];
+      input1 = +input2 / rate;
+    }
+
+    setInput1(input1.toFixed(8));
+    setInput2(input2);
   };
 
-  const onSelectOneHandler = (currency1: string) => {
-    let result =
-      +amount1 * rates[currency1.toUpperCase()][currency2.toUpperCase()];
+  const onPayCurrencyHandler = (paycurrency: string) => {
+    let rate =
+      rates.merchant[paycurrency.toUpperCase()][buycurrency.toUpperCase()];
+    let input2 = +input1 * rate;
 
-    setAmount2(result.toFixed(2));
-    setCurrency1(currency1);
+    // and here is a workaround in case the "rate" wasn't found in the first object "paycurrency"
+    if (!rate) {
+      rate =
+        rates.merchant[buycurrency.toUpperCase()][paycurrency.toUpperCase()];
+      input2 = +input1 / rate;
+    }
+    setInput2(input2.toFixed(8));
+    setPaycurrency(paycurrency);
   };
 
-  const onSelectTwoHandler = (currency2: string) => {
-    let result =
-      +amount2 * rates[currency2.toUpperCase()][currency1.toUpperCase()];
-    setAmount1(result.toFixed(2));
-    setCurrency2(currency2);
+  const onBuyCurrencyHandler = (buycurrency: string) => {
+    let rate =
+      rates.merchant[buycurrency.toUpperCase()][paycurrency.toUpperCase()];
+    let input1 = +input2 * rate;
+
+    // and here is a workaround in case the "rate" wasn't found in the first object "paycurrency"
+    if (!rate) {
+      rate =
+        rates.merchant[paycurrency.toUpperCase()][buycurrency.toUpperCase()];
+      input1 = +input2 / rate;
+    }
+
+    setInput1(input1.toFixed(8));
+    setButcurrency(buycurrency);
   };
 
   return (
@@ -164,30 +173,30 @@ const App: React.FC<Props> = (props) => {
           <InputUI
             label={"Pay"}
             options={currencies}
-            inputValue={amount1}
-            selectValue={currency1}
-            onInputChange={onAmountOneChangeHandler}
-            onCurrencyChange={onSelectOneHandler}
+            inputValue={input1}
+            selectValue={paycurrency}
+            onInputChange={onPayInputHandler}
+            onCurrencyChange={onPayCurrencyHandler}
             autoFocus
           />
 
           <InputUI
             label={"Buy"}
             options={currencies}
-            inputValue={amount2}
-            selectValue={currency2}
-            onInputChange={onAmountTwoChangeHandler}
-            onCurrencyChange={onSelectTwoHandler}
+            inputValue={input2}
+            selectValue={buycurrency}
+            onInputChange={onBuyInputHandler}
+            onCurrencyChange={onBuyCurrencyHandler}
           />
 
           <Typography>Payment method</Typography>
           <FormControl className={classes.select}>
             <Select
               disableUnderline
-              defaultValue={payments[0].value}
+              defaultValue={paymentMethod[0].value}
               IconComponent={KeyboardArrowDownIcon}
             >
-              {payments.map((payment) => {
+              {paymentMethod.map((payment) => {
                 return (
                   <MenuItem
                     className={classes.option}
@@ -212,9 +221,9 @@ const App: React.FC<Props> = (props) => {
           <Button
             onClick={() => router.push("/authenticate")}
             className={classes.button}
-            disabled={!amount1 || !amount2 ? true : false}
+            disabled={!input1 || !input2 ? true : false}
           >
-            Buy {currency2}
+            Buy {buycurrency}
           </Button>
         </CardActions>
       </div>

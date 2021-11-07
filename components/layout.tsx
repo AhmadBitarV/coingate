@@ -1,7 +1,10 @@
+import Drawer from "components/drawer";
+import Header from "components/header";
 import { makeStyles } from "@material-ui/core";
+
 import { useState } from "react";
-import Drawer from "../components/drawer";
-import Header from "../components/header";
+
+import { links } from "data";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -50,8 +53,8 @@ const useStyles = makeStyles((theme) => {
 const Layout: React.FC = ({ children }) => {
   const classes = useStyles();
 
+  // SideDrawer logic
   const [open, setOpen] = useState(false);
-
   const toggleDrawer = (event: any) => {
     if (
       event.type === "keydown" &&
@@ -73,10 +76,3 @@ const Layout: React.FC = ({ children }) => {
 };
 
 export default Layout;
-
-export const links = [
-  { text: "Products", link: "/products" },
-  { text: "Resources", link: "/resources" },
-  { text: "Buy Instantly", link: "/buy-instantly" },
-  { text: "Log In", link: "/authenticate" },
-];

@@ -35,8 +35,7 @@ recommended browser: Chrome
 
 <ul>
   <li><strong>Teso 2021</strong> https://github.com/AhmadBitarV/teso-2021 <br /> <li>
-
-<li><strong>Teso 2020</strong> https://github.com/AhmadBitarV/teso-2020 <br />
+  <li><strong>Teso 2020</strong> https://github.com/AhmadBitarV/teso-2020 <br />
  </li>
 
  </ul>

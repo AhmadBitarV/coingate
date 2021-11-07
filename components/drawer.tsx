@@ -9,6 +9,8 @@ import Link from "next/link";
 
 import Button from "./button";
 
+import { Links } from "data";
+
 const drawerWidth = 275;
 
 const useStyles = makeStyles({
@@ -26,15 +28,10 @@ const useStyles = makeStyles({
   },
 });
 
-interface Link {
-  text: string;
-  link: string;
-}
-
 interface Props {
   open: boolean;
-  toggleDrawer: (e: any) => void;
-  ListItems: Link[];
+  toggleDrawer: (event: React.KeyboardEvent | React.MouseEvent) => void;
+  ListItems: Links[]; // type exported from data.tsx
 }
 
 const Drawer: React.FC<Props> = ({ open, toggleDrawer, ListItems }) => {
