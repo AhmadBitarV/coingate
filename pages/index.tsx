@@ -131,49 +131,41 @@ const Home: NextPage<Props> = ({ rates, currencies }) => {
       </Head>
 
       <Box className={classes.root}>
-        <Slide timeout={1250} direction="left" in={true}>
-          <Box sx={{ alignSelf: "flex-end" }}>
-            <h1 className={classes.h1}>
-              <span style={{ color: theme.palette.secondary.main }}>
-                Buy Bitcoin,{" "}
-              </span>
-              Ethereum, Litecoin and other crypto{" "}
-              <span style={{ color: theme.palette.secondary.main }}>
-                online
-              </span>
-            </h1>
-          </Box>
-        </Slide>
+        <Box sx={{ alignSelf: "flex-end" }}>
+          <h1 className={classes.h1}>
+            <span style={{ color: theme.palette.secondary.main }}>
+              Buy Bitcoin,{" "}
+            </span>
+            Ethereum, Litecoin and other crypto{" "}
+            <span style={{ color: theme.palette.secondary.main }}>online</span>
+          </h1>
+        </Box>
 
-        <Slide timeout={1250} direction="up" in={true}>
-          <Box className={classes.calculator}>
-            <Calculator rates={rates} currencies={currencies} />
-          </Box>
-        </Slide>
+        <Box className={classes.calculator}>
+          <Calculator rates={rates} currencies={currencies} />
+        </Box>
 
-        <Slide timeout={1250} direction="right" in={true}>
-          <Box className={classes.paragraph}>
-            <p className={classes.p}>
-              Why bother going through complicated exchanges? Buy cryptocurrency
-              with top payment methods like SEPA bank transfer, Credit and Debit
-              Card, Apple Pay, Mobile balance or Klarna. You can buy Bitcoin,
-              Ethereum or any other popular crypto directly to your personal
-              wallet without making any initial deposits. It&apos;s as easy as
-              it gets!
-            </p>
+        <Box className={classes.paragraph}>
+          <p className={classes.p}>
+            Why bother going through complicated exchanges? Buy cryptocurrency
+            with top payment methods like SEPA bank transfer, Credit and Debit
+            Card, Apple Pay, Mobile balance or Klarna. You can buy Bitcoin,
+            Ethereum or any other popular crypto directly to your personal
+            wallet without making any initial deposits. It&apos;s as easy as it
+            gets!
+          </p>
 
-            <Button
-              className={classes.button}
-              endIcon={<KeyboardArrowRightIcon color="inherit" />}
-              variant="text"
-              onClick={() => {
-                router.push("/resources");
-              }}
-            >
-              Start Now
-            </Button>
-          </Box>
-        </Slide>
+          <Button
+            className={classes.button}
+            endIcon={<KeyboardArrowRightIcon color="inherit" />}
+            variant="text"
+            onClick={() => {
+              router.push("/resources");
+            }}
+          >
+            Start Now
+          </Button>
+        </Box>
       </Box>
     </>
   );
